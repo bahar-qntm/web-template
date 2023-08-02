@@ -310,7 +310,7 @@ export const getHostedConfiguration = () => {
             alias: 'default-booking/release-1',
             name: 'default-booking',
           },
-          id: 'dailybooking',
+          id: 'daily-booking',
           label: 'Daily Booking',
           unitType: 'day',
         },
