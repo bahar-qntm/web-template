@@ -232,6 +232,18 @@ export const listingTypes = [
       unitType: 'day',
     },
   },
+  // {
+  //   listingType: 'inquiry',
+  //   label: 'Inquiry',
+  //   transactionType: {
+  //     process: 'default-inquiry',
+  //     alias: 'default-inquiry/release-1',
+  //     unitType: 'inquiry-item',
+  //   },
+  //   price: {
+  //     enabled: false,
+  //   },
+  // },
   // // Here are some examples for other listingTypes
   // // TODO: SearchPage does not work well if both booking and product selling are used at the same time
   // {
