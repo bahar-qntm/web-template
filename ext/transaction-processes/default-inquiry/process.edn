@@ -1,0 +1,17 @@
+{:format :v3,
+ :transitions
+ [{:name :transition/inquire-without-payment,
+   :actor :actor.role/customer,
+   :actions [{:name :action/update-protected-data}],
+   :to :state/free-inquiry}],
+ :notifications
+ [{:name :notification/new-inquiry,
+   :on :transition/inquire-without-payment,
+   ;; This notification is delayed to give the customer a chance to verify their
+   ;; email address, in case they are a new customer.
+   :at
+   {:fn/plus
+    [{:fn/timepoint [:time/first-entered-state :state/free-inquiry]}
+     {:fn/period ["PT15M"]}]},
+   :to :actor.role/provider,
+   :template :new-inquiry}]}
