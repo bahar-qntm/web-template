@@ -22,7 +22,11 @@ import {
   LISTING_PAGE_PARAM_TYPES,
 } from '../../../util/urlHelpers';
 import { ensureCurrentUser, ensureListing } from '../../../util/data';
-import { BOOKING_PROCESS_NAME, isBookingProcess } from '../../../transactions/transaction';
+import {
+  BOOKING_PROCESS_NAME,
+  isBookingProcess,
+  isPurchaseProcess,
+} from '../../../transactions/transaction';
 
 // Import shared components
 import {
@@ -53,7 +57,9 @@ import css from './EditListingWizard.module.css';
 const TABS_DETAILS_ONLY = [DETAILS];
 const TABS_PRODUCT = [DETAILS, PRICING_AND_STOCK, DELIVERY, PHOTOS];
 const TABS_BOOKING = [DETAILS, LOCATION, PRICING, AVAILABILITY, PHOTOS];
-const TABS_ALL = [...TABS_PRODUCT, ...TABS_BOOKING];
+const TABS_INQUIRY = [DETAILS, LOCATION, PRICING, PHOTOS];
+const TABS_INQUIRY_WITHOUT_PRICE = [DETAILS, LOCATION, PHOTOS];
+const TABS_ALL = [...TABS_PRODUCT, ...TABS_BOOKING, ...TABS_INQUIRY];
 
 // Tabs are horizontal in small screens
 const MAX_HORIZONTAL_NAV_SCREEN_WIDTH = 1023;
@@ -69,7 +75,7 @@ const STRIPE_ONBOARDING_RETURN_URL_FAILURE = 'failure';
  * @param {boolean} isNewListingFlow
  * @param {string} processName
  */
-const tabLabelAndSubmit = (intl, tab, isNewListingFlow, processName) => {
+const tabLabelAndSubmit = (intl, tab, isNewListingFlow, isPriceDisabled, processName) => {
   const processNameString = isNewListingFlow ? `${processName}.` : '';
   const newOrEdit = isNewListingFlow ? 'new' : 'edit';
 
@@ -89,7 +95,10 @@ const tabLabelAndSubmit = (intl, tab, isNewListingFlow, processName) => {
     submitButtonKey = `EditListingWizard.${processNameString}${newOrEdit}.saveDelivery`;
   } else if (tab === LOCATION) {
     labelKey = 'EditListingWizard.tabLabelLocation';
-    submitButtonKey = `EditListingWizard.${processNameString}${newOrEdit}.saveLocation`;
+    submitButtonKey =
+      isPriceDisabled && isNewListingFlow
+        ? `EditListingWizard.${processNameString}${newOrEdit}.saveLocationNoPricingTab`
+        : `EditListingWizard.${processNameString}${newOrEdit}.saveLocation`;
   } else if (tab === AVAILABILITY) {
     labelKey = 'EditListingWizard.tabLabelAvailability';
     submitButtonKey = `EditListingWizard.${processNameString}${newOrEdit}.saveAvailability`;
@@ -380,9 +389,13 @@ class EditListingWizard extends Component {
     // Instead, operator should do that through Console or Integration API.
     const validListingTypes = config.listing.listingTypes;
     const existingListingType = currentListing.attributes?.publicData?.listingType;
-    const invalidExistingListingType =
-      existingListingType &&
-      !validListingTypes.find(config => config.listingType === existingListingType);
+    const listingTypeConfig = existingListingType
+      ? validListingTypes.find(config => config.listingType === existingListingType)
+      : null;
+    const invalidExistingListingType = existingListingType && !listingTypeConfig;
+    // TODO: price.enabled is only available with inquiry process
+    //       if it's enabled with other processes, translations for "new" flow needs to be updated.
+    const isPriceDisabled = listingTypeConfig?.price?.enabled === false;
 
     const processName = transactionProcessAlias
       ? transactionProcessAlias.split('/')[0]
@@ -396,7 +409,11 @@ class EditListingWizard extends Component {
         ? TABS_DETAILS_ONLY
         : isBookingProcess(processName)
         ? TABS_BOOKING
-        : TABS_PRODUCT;
+        : isPurchaseProcess(processName)
+        ? TABS_PRODUCT
+        : isPriceDisabled
+        ? TABS_INQUIRY_WITHOUT_PRICE
+        : TABS_INQUIRY;
 
     // Check if wizard tab is active / linkable.
     // When creating a new listing, we don't allow users to access next tab until the current one is completed.
@@ -496,7 +513,13 @@ class EditListingWizard extends Component {
           tabRootClassName={css.tab}
         >
           {tabs.map(tab => {
-            const tabTranslations = tabLabelAndSubmit(intl, tab, isNewListingFlow, processName);
+            const tabTranslations = tabLabelAndSubmit(
+              intl,
+              tab,
+              isNewListingFlow,
+              isPriceDisabled,
+              processName
+            );
             return (
               <EditListingWizardTab
                 {...rest}
