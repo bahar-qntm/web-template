@@ -1,0 +1,8 @@
+{
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/5bb83e23-d546-4dc2-8666-78050a562dbf/resourceGroups/cleanCannabis/providers/Microsoft.Web/sites/cleanCannabis-marketplace",
+    "appService.deploySubpath": "."
+}
