@@ -179,6 +179,17 @@ const EditListingWizardTab = props => {
 
   // TODO: add missing cases for supported tabs
   switch (tab) {
+    case PHOTOS: {
+      return (
+        <EditListingPhotosPanel
+          {...panelProps(PHOTOS)}
+          listingImageConfig={config.layout.listingImage}
+          images={images}
+          onImageUpload={onImageUpload}
+          onRemoveImage={onRemoveImage}
+        />
+      );
+    }
     case DETAILS: {
       return (
         <EditListingDetailsPanel
@@ -237,17 +248,6 @@ const EditListingWizardTab = props => {
           history={history}
           routeConfiguration={routeConfiguration}
           {...panelProps(AVAILABILITY)}
-        />
-      );
-    }
-    case PHOTOS: {
-      return (
-        <EditListingPhotosPanel
-          {...panelProps(PHOTOS)}
-          listingImageConfig={config.layout.listingImage}
-          images={images}
-          onImageUpload={onImageUpload}
-          onRemoveImage={onRemoveImage}
         />
       );
     }

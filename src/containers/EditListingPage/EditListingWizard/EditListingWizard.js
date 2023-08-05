@@ -51,8 +51,8 @@ import css from './EditListingWizard.module.css';
 // Note 2: Ensure that draft listing is created after the first panel
 // and listing publishing happens after last panel.
 const TABS_DETAILS_ONLY = [DETAILS];
-const TABS_PRODUCT = [DETAILS, PRICING_AND_STOCK, DELIVERY, PHOTOS];
-const TABS_BOOKING = [DETAILS, LOCATION, PRICING, AVAILABILITY, PHOTOS];
+const TABS_PRODUCT = [PHOTOS, DETAILS, PRICING_AND_STOCK, DELIVERY];
+const TABS_BOOKING = [PHOTOS, DETAILS, LOCATION, PRICING, AVAILABILITY];
 const TABS_ALL = [...TABS_PRODUCT, ...TABS_BOOKING];
 
 // Tabs are horizontal in small screens
@@ -75,7 +75,10 @@ const tabLabelAndSubmit = (intl, tab, isNewListingFlow, processName) => {
 
   let labelKey = null;
   let submitButtonKey = null;
-  if (tab === DETAILS) {
+  if (tab === PHOTOS) {
+    labelKey = 'EditListingWizard.tabLabelPhotos';
+    submitButtonKey = `EditListingWizard.${processNameString}${newOrEdit}.savePhotos`;
+  } else if (tab === DETAILS) {
     labelKey = 'EditListingWizard.tabLabelDetails';
     submitButtonKey = `EditListingWizard.${processNameString}${newOrEdit}.saveDetails`;
   } else if (tab === PRICING) {
@@ -93,9 +96,6 @@ const tabLabelAndSubmit = (intl, tab, isNewListingFlow, processName) => {
   } else if (tab === AVAILABILITY) {
     labelKey = 'EditListingWizard.tabLabelAvailability';
     submitButtonKey = `EditListingWizard.${processNameString}${newOrEdit}.saveAvailability`;
-  } else if (tab === PHOTOS) {
-    labelKey = 'EditListingWizard.tabLabelPhotos';
-    submitButtonKey = `EditListingWizard.${processNameString}${newOrEdit}.savePhotos`;
   }
 
   return {
@@ -178,6 +178,8 @@ const tabCompleted = (tab, listing, config) => {
   const deliveryOptionPicked = publicData && (shippingEnabled || pickupEnabled);
 
   switch (tab) {
+    case PHOTOS:
+      return images && images.length > 0;
     case DETAILS:
       return !!(
         description &&
@@ -197,8 +199,6 @@ const tabCompleted = (tab, listing, config) => {
       return !!(geolocation && publicData?.location?.address);
     case AVAILABILITY:
       return !!availabilityPlan;
-    case PHOTOS:
-      return images && images.length > 0;
     default:
       return false;
   }
