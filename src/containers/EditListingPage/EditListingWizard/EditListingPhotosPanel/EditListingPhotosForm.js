@@ -224,6 +224,7 @@ export const EditListingPhotosFormComponent = props => {
                 id="addImage"
                 name="addImage"
                 accept={ACCEPT_IMAGES}
+                capture="environment"
                 label={
                   <span className={css.chooseImageText}>
                     <span className={css.chooseImage}>
