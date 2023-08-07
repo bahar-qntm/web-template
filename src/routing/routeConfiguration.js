@@ -91,11 +91,13 @@ const routeConfiguration = (layoutConfig) => {
     {
       path: '/l',
       name: 'ListingBasePage',
+      auth: true,
       component: RedirectToLandingPage,
     },
     {
       path: '/l/:slug/:id',
       name: 'ListingPage',
+      auth: true,
       component: ListingPage,
       loadData: pageDataLoadingAPI.ListingPage.loadData,
     },
@@ -145,17 +147,20 @@ const routeConfiguration = (layoutConfig) => {
     {
       path: '/l/:id',
       name: 'ListingPageCanonical',
+      auth: true,
       component: ListingPage,
       loadData: pageDataLoadingAPI.ListingPage.loadData,
     },
     {
       path: '/u',
       name: 'ProfileBasePage',
+      auth: true,
       component: RedirectToLandingPage,
     },
     {
       path: '/u/:id',
       name: 'ProfilePage',
+      auth: true,
       component: ProfilePage,
       loadData: pageDataLoadingAPI.ProfilePage.loadData,
     },
