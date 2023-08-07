@@ -61,7 +61,7 @@ export const FieldAddImage = props => {
   return (
     <Field form={null} {...rest}>
       {fieldprops => {
-        const { accept, input, label, disabled: fieldDisabled } = fieldprops;
+        const { accept, input, label, disabled: fieldDisabled, capture} = fieldprops;
         const { name, type } = input;
         const onChange = e => {
           const file = e.target.files[0];
@@ -69,7 +69,7 @@ export const FieldAddImage = props => {
           formApi.blur(`addImage`);
           onImageUploadHandler(file);
         };
-        const inputProps = { accept, id: name, name, onChange, type };
+        const inputProps = { accept, id: name, name, onChange, type, capture };
         return (
           <div className={css.addImageWrapper}>
             <AspectRatioWrapper width={aspectWidth} height={aspectHeight}>

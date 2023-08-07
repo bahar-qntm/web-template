@@ -29,6 +29,7 @@ exports[`EditListingDeliveryForm matches snapshot 1`] = `
                 id="addImage"
                 name="addImage"
                 type="file"
+                capture="environment"
               />
               <label
                 class="addImage"
