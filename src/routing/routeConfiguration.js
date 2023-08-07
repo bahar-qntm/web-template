@@ -84,6 +84,7 @@ const routeConfiguration = (layoutConfig) => {
     {
       path: '/s',
       name: 'SearchPage',
+      auth: true,
       component: SearchPage,
       loadData: pageDataLoadingAPI.SearchPage.loadData,
     },
