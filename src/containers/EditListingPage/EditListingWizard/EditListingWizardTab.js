@@ -179,6 +179,15 @@ const EditListingWizardTab = props => {
 
   // TODO: add missing cases for supported tabs
   switch (tab) {
+    case DETAILS: {
+      return (
+        <EditListingDetailsPanel
+          {...panelProps(DETAILS)}
+          onProcessChange={onProcessChange}
+          config={config}
+        />
+      );
+    }
     case PHOTOS: {
       return (
         <EditListingPhotosPanel
@@ -187,15 +196,6 @@ const EditListingWizardTab = props => {
           images={images}
           onImageUpload={onImageUpload}
           onRemoveImage={onRemoveImage}
-        />
-      );
-    }
-    case DETAILS: {
-      return (
-        <EditListingDetailsPanel
-          {...panelProps(DETAILS)}
-          onProcessChange={onProcessChange}
-          config={config}
         />
       );
     }

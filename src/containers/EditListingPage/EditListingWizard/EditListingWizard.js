@@ -51,8 +51,8 @@ import css from './EditListingWizard.module.css';
 // Note 2: Ensure that draft listing is created after the first panel
 // and listing publishing happens after last panel.
 const TABS_DETAILS_ONLY = [DETAILS];
-const TABS_PRODUCT = [PHOTOS, DETAILS, PRICING_AND_STOCK, DELIVERY];
-const TABS_BOOKING = [PHOTOS, DETAILS, LOCATION, PRICING, AVAILABILITY];
+const TABS_PRODUCT = [DETAILS, PHOTOS, PRICING_AND_STOCK, DELIVERY];
+const TABS_BOOKING = [DETAILS, PHOTOS, LOCATION, PRICING, AVAILABILITY];
 const TABS_ALL = [...TABS_PRODUCT, ...TABS_BOOKING];
 
 // Tabs are horizontal in small screens
@@ -75,12 +75,12 @@ const tabLabelAndSubmit = (intl, tab, isNewListingFlow, processName) => {
 
   let labelKey = null;
   let submitButtonKey = null;
-  if (tab === PHOTOS) {
-    labelKey = 'EditListingWizard.tabLabelPhotos';
-    submitButtonKey = `EditListingWizard.${processNameString}${newOrEdit}.savePhotos`;
-  } else if (tab === DETAILS) {
+  if (tab === DETAILS) {
     labelKey = 'EditListingWizard.tabLabelDetails';
     submitButtonKey = `EditListingWizard.${processNameString}${newOrEdit}.saveDetails`;
+  } else if (tab === PHOTOS) {
+    labelKey = 'EditListingWizard.tabLabelPhotos';
+    submitButtonKey = `EditListingWizard.${processNameString}${newOrEdit}.savePhotos`;
   } else if (tab === PRICING) {
     labelKey = 'EditListingWizard.tabLabelPricing';
     submitButtonKey = `EditListingWizard.${processNameString}${newOrEdit}.savePricing`;
@@ -178,8 +178,6 @@ const tabCompleted = (tab, listing, config) => {
   const deliveryOptionPicked = publicData && (shippingEnabled || pickupEnabled);
 
   switch (tab) {
-    case PHOTOS:
-      return images && images.length > 0;
     case DETAILS:
       return !!(
         description &&
@@ -189,6 +187,8 @@ const tabCompleted = (tab, listing, config) => {
         unitType &&
         hasValidListingFieldsInExtendedData(publicData, privateData, config)
       );
+    case PHOTOS:
+      return images && images.length > 0;
     case PRICING:
       return !!price;
     case PRICING_AND_STOCK:
