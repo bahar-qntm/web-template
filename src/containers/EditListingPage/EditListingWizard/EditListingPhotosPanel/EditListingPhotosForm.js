@@ -35,6 +35,7 @@ const ImageUploadError = props => {
   ) : null;
 };
 
+/*
 // NOTE: PublishListingError and ShowListingsError are here since Photos panel is the last visible panel
 // before creating a new listing. If that order is changed, these should be changed too.
 // Create and show listing errors are shown above submit button
@@ -53,7 +54,7 @@ const ShowListingsError = props => {
     </p>
   ) : null;
 };
-
+*/
 // Field component that uses file-input to allow user to select images.
 export const FieldAddImage = props => {
   const { formApi, onImageUploadHandler, aspectWidth = 1, aspectHeight = 1, ...rest } = props;
@@ -157,8 +158,11 @@ export const EditListingPhotosFormComponent = props => {
         const images = values.images;
         const { aspectWidth = 1, aspectHeight = 1, variantPrefix } = listingImageConfig;
 
-        const { publishListingError, showListingsError, updateListingError, uploadImageError } =
+        //const { publishListingError, showListingsError, updateListingError, uploadImageError } =
+        //  fetchErrors || {};
+        const { updateListingError, uploadImageError } =
           fetchErrors || {};
+
         const uploadOverLimit = isUploadImageOverLimitError(uploadImageError);
 
         // imgs can contain added images (with temp ids) and submitted images with uniq ids.
@@ -255,8 +259,7 @@ export const EditListingPhotosFormComponent = props => {
               <FormattedMessage id="EditListingPhotosForm.addImagesTip" />
             </p>
 
-            <PublishListingError error={publishListingError} />
-            <ShowListingsError error={showListingsError} />
+            
 
             <Button
               className={css.submitButton}
@@ -278,8 +281,6 @@ EditListingPhotosFormComponent.defaultProps = { fetchErrors: null };
 
 EditListingPhotosFormComponent.propTypes = {
   fetchErrors: shape({
-    publishListingError: propTypes.error,
-    showListingsError: propTypes.error,
     uploadImageError: propTypes.error,
     updateListingError: propTypes.error,
   }),

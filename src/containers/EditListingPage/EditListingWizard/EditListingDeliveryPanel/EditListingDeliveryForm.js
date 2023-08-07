@@ -30,6 +30,25 @@ import css from './EditListingDeliveryForm.module.css';
 
 const identity = v => v;
 
+// NOTE: PublishListingError and ShowListingsError are here since we moved Delivery panel to the last visible panel
+// before creating a new listing. If that order is changed, these should be changed too.
+// Create and show listing errors are shown above submit button
+const PublishListingError = props => {
+  return props.error ? (
+    <p className={css.error}>
+      <FormattedMessage id="EditListingDeliveryForm.publishListingFailed" />
+    </p>
+  ) : null;
+};
+
+const ShowListingsError = props => {
+  return props.error ? (
+    <p className={css.error}>
+      <FormattedMessage id="EditListingDeliveryForm.showListingFailed" />
+    </p>
+  ) : null;
+};
+
 export const EditListingDeliveryFormComponent = props => (
   <FinalForm
     {...props}
@@ -81,7 +100,7 @@ export const EditListingDeliveryFormComponent = props => (
         id: 'EditListingDeliveryForm.optionalText',
       });
 
-      const { updateListingError, showListingsError } = fetchErrors || {};
+      const { publishListingError, showListingsError, updateListingError } = fetchErrors || {};
 
       const classes = classNames(css.root, className);
       const submitReady = (updated && pristine) || ready;
@@ -242,6 +261,9 @@ export const EditListingDeliveryFormComponent = props => (
             />
           </div>
 
+          <PublishListingError error={publishListingError} />
+          <ShowListingsError error={showListingsError} />
+
           <Button
             className={css.submitButton}
             type="submit"
@@ -275,6 +297,7 @@ EditListingDeliveryFormComponent.propTypes = {
   updated: bool.isRequired,
   updateInProgress: bool.isRequired,
   fetchErrors: shape({
+    publishListingError: propTypes.error,
     showListingsError: propTypes.error,
     updateListingError: propTypes.error,
   }),
