@@ -65,10 +65,49 @@ export const FieldAddImage = props => {
         const { name, type } = input;
         const onChange = e => {
           const file = e.target.files[0];
+          // This is where I would need to add code to process the image.
+
           formApi.change(`addImage`, file);
           formApi.blur(`addImage`);
           onImageUploadHandler(file);
         };
+
+/*        const onChange = async e => {
+          const file = e.target.files[0];
+          
+          // Create a FormData object to send the file to the server
+          const formData = new FormData();
+          formData.append('image', file);
+          
+          try {
+            // Make the API call
+            const response = await fetch('YOUR_API_ENDPOINT_HERE', {
+              method: 'POST',
+              body: formData
+            });
+        
+            // Check if the response is successful
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+        
+            // Get the processed image or response data if needed
+            const data = await response.json(); // or response.blob() if the server returns processed image
+        
+            // If you get a new processed image from the API, you can update the file variable here
+            // file = new File([data], "filename.extension"); // replace data with blob if you used response.blob()
+        
+            // Now that the API call was successful, execute the subsequent lines of code
+            formApi.change(`addImage`, file);
+            formApi.blur(`addImage`);
+            onImageUploadHandler(file);
+        
+          } catch (error) {
+            console.error('There was a problem with the fetch operation:', error.message);
+            // Handle the error accordingly, maybe show a message to the user
+          }
+        };
+*/
         const inputProps = { accept, id: name, name, onChange, type, capture };
         return (
           <div className={css.addImageWrapper}>
